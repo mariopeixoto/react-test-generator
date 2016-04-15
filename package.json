@@ -1,0 +1,20 @@
+{
+  "name": "project1",
+  "version": "0.0.0",
+  "description": "",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "NODE_ENV=production webpack --config webpack.config.production.js",
+    "lint": "eslint --ext .js,.jsx .",
+    "deploy": "npm run clean & npm run build && surge -p .",
+    "start": "NODE_ENV=development node server.js"
+  },
+  "author": "Mario Peixoto <mario.peixoto@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^15.0.1"
+  },
+  "devDependencies": {
+    "aran": "^1.1.0"
+  }
+}
