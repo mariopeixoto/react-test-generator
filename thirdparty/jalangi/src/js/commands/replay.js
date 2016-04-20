@@ -69,6 +69,7 @@ function runAnalysis(initParam) {
         var result = J$.endExecution();
         if (process.send && args.analysis) {
             // we assume send is synchronous
+            console.log(result);
             process.send({result:result});
         }
     }

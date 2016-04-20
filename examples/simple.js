@@ -1,5 +1,5 @@
 if (typeof window === "undefined") {
-    require('../../jalangi/src/js/InputManager');
+    require('../../jalangi/src/js/InputManager2');
     require(process.cwd()+'/inputs');
 }
 

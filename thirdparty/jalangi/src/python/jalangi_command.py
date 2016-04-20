@@ -77,7 +77,7 @@ class TestRecordReplayCommand:
 
 class TestRecordReplayBrowserCommand:
     name = "Browser Record-Replay Analysis"
-    description = "Test Record-Replay for Browser Script via PhantomJS" 
+    description = "Test Record-Replay for Browser Script via PhantomJS"
     def execute(self, params):
         parser = OptionParser()
         (options, args) = parser.parse_args(args=params)
@@ -89,7 +89,7 @@ class TestRecordReplayBrowserCommand:
 
 class TestRecordReplayAppCommand:
     name = "App Record-Replay Analysis"
-    description = "Test Record-Replay for App via Selenium" 
+    description = "Test Record-Replay for App via Selenium"
     def execute(self, params):
         parser = OptionParser()
         (options, args) = parser.parse_args(args=params)
@@ -98,7 +98,7 @@ class TestRecordReplayAppCommand:
             parser.print_help()
             sys.exit(1)
         print commands.testrr_app(os.path.abspath(args[0]))
-        
+
 class ServerCommand:
     name = "Server"
     description = "Run a simple HTTP server serving the current directory"
@@ -114,7 +114,7 @@ class ServerCommand:
         print "serving at port", options.port
         print "Use Ctrl-C to kill"
         httpd.serve_forever()
-        
+
 class ConcolicCommand:
     name = "Concolic testing"
     description = "Generate test inputs using concolic testing"
@@ -128,6 +128,20 @@ class ConcolicCommand:
             parser.print_help()
             sys.exit(1)
         commands.concolic(args[0], int(options.inputs))
+
+class ConcolicTGNCommand:
+    name = "Concolic testing"
+    description = "Generate test inputs using concolic testing"
+    def execute(self, params):
+        parser = OptionParser()
+        parser.add_option("-i", "--inputs", dest="inputs",
+                          help="Bound on number of inputs (default 1000)", default=1000)
+        (options, args) = parser.parse_args(args=params)
+        if len(args) < 1:
+            print "You must specify a filename"
+            parser.print_help()
+            sys.exit(1)
+        commands.concolic_tgn(args[0], int(options.inputs))
 
 class SymbolicCommand:
     name = "Symbolic execution"
@@ -170,7 +184,7 @@ class RunConfigCommand:
         try:
             conf = config_parser.parse_jalangi_conf_file(args[0])
             print "==== Executing Jalangi using configuration in: {}".format(args[0])
-            commands.run_config(conf) 
+            commands.run_config(conf)
         except util.JalangiException as e:
             print "Parsing conf file failed: {}".format(e.message)
             sys.exit(1)
@@ -187,9 +201,9 @@ class RRServerCommand:
             sys.exit(1)
         url = args[0]
         commands.rrserver(url)
-        
-        
-        
+
+
+
 COMMANDS = {"instrument" : InstrumentCommand,
             "analyze" : AnalysisCommand,
             "direct" : DirectAnalysisCommand,
@@ -201,8 +215,9 @@ COMMANDS = {"instrument" : InstrumentCommand,
             "server" : ServerCommand,
             "rrserver" : RRServerCommand,
             "testrr_browser": TestRecordReplayBrowserCommand,
-            "testrr_app": TestRecordReplayAppCommand
-            
+            "testrr_app": TestRecordReplayAppCommand,
+            "concolic_tgn": ConcolicTGNCommand
+
 }
 
 def print_help():

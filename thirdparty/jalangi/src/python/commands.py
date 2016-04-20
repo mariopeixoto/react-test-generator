@@ -67,7 +67,7 @@ def direct(filee, instrumented_f, jalangi=util.DEFAULT_INSTALL, analysis=None):
 
 def record(filee, instrumented_f, jalangi=util.DEFAULT_INSTALL):
     return util.run_node_script(jalangi.record_script(), os.path.join(os.path.dirname(filee + ".js"),instrumented_f), jalangi=jalangi, savestderr=True)
-    
+
 def instrument(filee,output_dir=".",jalangi=util.DEFAULT_INSTALL):
     """
     Invoke Jalangi and instrument the file
@@ -91,7 +91,7 @@ def replay(f=None, jalangi=util.DEFAULT_INSTALL, analysis=None):
         return util.run_node_script(jalangi.replay_script(), *l, jalangi=jalangi, savestderr=True)
     else:
         return util.run_node_script(jalangi.replay_script(), "--tracefile", trace, jalangi=jalangi, savestderr=True)
-        
+
 
 def concolic (filee, inputs, jalangi=util.DEFAULT_INSTALL):
     try:
@@ -117,12 +117,12 @@ def concolic (filee, inputs, jalangi=util.DEFAULT_INSTALL):
         print record(os.path.join(os.pardir,filee),instrumented_f,jalangi=jalangi)
         print "---- Replaying {} ----".format(filee)
         print replay(jalangi=jalangi,analysis=[jalangi.concolic_analysis()])
-        
+
         try:
             iters = int(util.head("jalangi_tail",1)[0])
         except: pass
         i = i + 1
-        
+
     for i in glob.glob("jalangi_inputs*"):
         print "*** Generated (jalangi_tmp/{}:1:1) for ({}.js:1:1)".format(i,filee)
     iters = iters + 1
@@ -134,6 +134,42 @@ def concolic (filee, inputs, jalangi=util.DEFAULT_INSTALL):
         print "{}.js failed".format(filee)
         with open("../jalangi_sym_test_results", 'a') as f:
          f.write("{}.js failed\n".format(filee))
+    util.move_coverage(jalangi)
+
+def concolic_tgn (filee, inputs, jalangi=util.DEFAULT_INSTALL):
+    print inputs
+    try:
+        shutil.rmtree("jalangi_tmp")
+    except: pass
+    os.mkdir("jalangi_tmp")
+    os.mkdir("jalangi_tmp/out")
+    os.putenv("JALANGI_HOME", jalangi.get_home())
+    os.chdir("jalangi_tmp")
+    (instrumented_f, out) = instrument(os.path.join(os.pardir,filee), jalangi=jalangi)
+    i = 0
+    iters = 0
+    while i <= iters and i <= inputs:
+        try: # Ignore failures on first iteration
+            os.remove("inputs.js")
+            shutil.copy("jalangi_inputs{}.js".format(i), "inputs.js")
+        except:
+            pass
+        if not os.path.isfile("inputs.js"):
+            util.mkempty("inputs.js")
+        print "==== Input {} ====".format(i)
+        print "---- Recording execution of {} ----".format(filee)
+        print record(os.path.join(os.pardir,filee),instrumented_f,jalangi=jalangi)
+        print "---- Replaying {} ----".format(filee)
+        print replay(jalangi=jalangi,analysis=[jalangi.concolic_analysis()])
+
+        try:
+            iters = int(util.head("jalangi_tail",1)[0])
+        except: pass
+        i = i + 1
+
+    for i in glob.glob("jalangi_inputs*"):
+        print "*** Generated (jalangi_tmp/{}:1:1) for ({}.js:1:1)".format(i,filee)
+    iters = iters + 1
     util.move_coverage(jalangi)
 
 # core logic for testing record-replay
@@ -176,11 +212,11 @@ def testrr_helper (filee, jalangi, norm_fn, record_fn, instrument_fn=instrument)
     print rep
     try:
 	    wcl = util.count_lines("jalangi_trace")
-	
+
 	    with open("../jalangi_test_results", 'a') as f:
 		f.write("# of lines in jalangi_trace for {}: {}".format(filee,str(wcl)))
 		f.write("\n")
-    except: pass	
+    except: pass
     if norm != rep: #TODO: Factor out this.
         print "{}.js failed".format(filee)
         import difflib
@@ -195,7 +231,7 @@ def testrr_helper (filee, jalangi, norm_fn, record_fn, instrument_fn=instrument)
             f.write("\n")
             for line in difflib.unified_diff(rec.splitlines(1), rep.splitlines(1), fromfile='record.{}'.format(filee), tofile='replay.{}'.format(filee)):
                 f.write(line)
-        
+
     util.move_coverage(jalangi)
 
 # test record-replay for standalone script
@@ -248,14 +284,14 @@ def get_app_exercise_fn(app_dir):
     finally:
         sys.path = old_sys_path
     return exercise_fn
-    
+
 def app_run(app_dir,jalangi=util.DEFAULT_INSTALL):
     selenium_util = load_selenium(jalangi)
     # start up web server in parent directory
     # get rid of .js appended by default
     app_dir = os.path.splitext(app_dir)[0]
     os.chdir("..")
-    sp = subprocess.Popen(["python","-m","SimpleHTTPServer","8181"])    
+    sp = subprocess.Popen(["python","-m","SimpleHTTPServer","8181"])
     os.chdir("jalangi_tmp")
     try:
         exercise_fn = get_app_exercise_fn(app_dir)
@@ -271,7 +307,7 @@ def app_record(app_dir,inst_app_dir,jalangi=util.DEFAULT_INSTALL):
     selenium_util = load_selenium(jalangi)
     # start up web server in parent directory
     os.chdir("..")
-    sp = subprocess.Popen(["python","-m","SimpleHTTPServer","8181"])    
+    sp = subprocess.Popen(["python","-m","SimpleHTTPServer","8181"])
     os.chdir("jalangi_tmp")
     try:
         exercise_fn = get_app_exercise_fn(inst_app_dir)
@@ -377,7 +413,7 @@ def run_config(config, jalangi=util.DEFAULT_INSTALL):
         p = os.path.dirname(config.mainfile)
         dot_files = []
         for f in glob.glob(os.path.join(p, "*.dot").format(p)):
-            try: 
+            try:
                 shutil.copy(f,put_dot)
             except: pass
             dot_files.append(os.path.abspath(f))
@@ -399,5 +435,3 @@ def rrserver(url):
     Popen([util.find_node(), 'src/js/commands/socket.js', '127.0.0.1', '8080', url])
     sleep(2)
     webbrowser.open(url)
-    
-  
