@@ -4,17 +4,15 @@
   "description": "",
   "main": "lib/index.js",
   "scripts": {
-    "build": "NODE_ENV=production webpack --config webpack.config.production.js",
-    "lint": "eslint --ext .js,.jsx .",
-    "deploy": "npm run clean & npm run build && surge -p .",
-    "start": "NODE_ENV=development node server.js"
+    "start": "NODE_ENV=development node lib/index.js",
+    "test": "jest --no-cache"
   },
   "author": "Mario Peixoto <mario.peixoto@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "react": "^15.0.1"
-  },
-  "devDependencies": {
-    "aran": "^1.1.0"
+    "react": "^15.0.1",
+    "react-addons-test-utils": "^15.0.1",
+    "react-dom": "^15.0.1",
+    "yargs": "~4.6.0"
   }
 }
