@@ -158,7 +158,13 @@ def concolic_tgn (filee, inputs, jalangi=util.DEFAULT_INSTALL):
             util.mkempty("inputs.js")
         print "==== Input {} ====".format(i)
         print "---- Recording execution of {} ----".format(filee)
-        print record(os.path.join(os.pardir,filee),instrumented_f,jalangi=jalangi)
+        print "Output!!"
+        output = record(os.path.join(os.pardir,filee),instrumented_f,jalangi=jalangi)
+
+        with open("jalangi_outputs{}.js".format(i), 'w') as output_f:
+            output_f.write(output);
+
+        print output
         print "---- Replaying {} ----".format(filee)
         print replay(jalangi=jalangi,analysis=[jalangi.concolic_analysis()])
 
