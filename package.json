@@ -18,6 +18,10 @@
     "glob": "~7.0.3",
     "exec-sync": "~0.1.6",
     "stringbuilder": "0.0.11",
-    "camelcase": "~2.1.1"
+    "camelcase": "~2.1.1",
+    "babel-cli": "~6.7.5",
+    "babel-preset-es2015": "*",
+    "babel-preset-react": "*",
+    "babel-polyfill": "~6.7.4"
   }
 }
