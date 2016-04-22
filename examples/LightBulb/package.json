@@ -10,14 +10,10 @@
   "license": "MIT",
   "dependencies": {
     "react": "^15.0.1",
-    "react-dom": "^15.0.1",
-    "jest": "~0.1.40"
+    "react-dom": "^15.0.1"
   },
   "devDependencies": {
     "babel-jest": "^11.0.2",
-    "babel-polyfill": "^6.7.4",
-    "babel-preset-es2015": "*",
-    "babel-preset-react": "*",
     "jest-cli": "^11.0.2",
     "react-addons-test-utils": "^15.0.1"
   },
@@ -26,6 +22,7 @@
       "<rootDir>/node_modules/react",
       "<rootDir>/node_modules/react-dom",
       "<rootDir>/node_modules/react-addons-test-utils"
-    ]
+    ],
+    "collectCoverage": true
   }
 }

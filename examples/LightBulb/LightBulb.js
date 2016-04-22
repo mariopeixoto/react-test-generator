@@ -1,14 +1,15 @@
-import React from 'react';
+'use strict';
 
-class LightBulb extends React.Component {
-  render() {
-    const { isOn } = this.props;
-    if (isOn) {
+var React = require('react');
+
+var LightBulb = React.createClass({
+  render: function() {
+    if (this.props.isOn) {
       return <div>Light is on</div>;
     } else {
-      return <div>Light is off</div>;
+      return <div>Light is off</div>
     }
   }
-}
+});
 
-export default LightBulb;
+module.exports = LightBulb;
