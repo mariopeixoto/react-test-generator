@@ -1,0 +1,8 @@
+GENERATE-INTERMEDIATE(component):
+1. run babel transpiler on component code
+2. add required imports for symbolic execution
+3. add required imports for React library
+4. add read props object from Jalangi
+5. add component instantiation
+6. add render component
+7. add output return value from rendering

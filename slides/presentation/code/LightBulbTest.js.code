@@ -1,0 +1,27 @@
+describe('LightBulb', function() {
+
+	it('input 0', function() {
+
+		//Rendering component with input
+		var input = JSON.parse("{\"isOn\":0}");
+		var lightBulb = ReactDOMServer.renderToStaticMarkup(
+			<LightBulb {...input} />
+		);
+		//Expectations
+		expect(lightBulb).toEqual("<div>Light is off</div>");
+
+	});
+
+	it('input 1', function() {
+
+		//Rendering component with input
+		var input = JSON.parse("{\"isOn\":-1}");
+		var lightBulb = ReactDOMServer.renderToStaticMarkup(
+			<LightBulb {...input} />
+		);
+		//Expectations
+		expect(lightBulb).toEqual("<div>Light is on</div>");
+
+	});
+
+});

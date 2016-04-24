@@ -1,0 +1,21 @@
+var HelloUser = React.createClass({
+	render: function() {
+		return <div>Hello {this.props.user}!</div>;
+	}
+});
+
+describe(‘HelloUser’, function() {
+  it(‘shows the user name’, function() {
+    // Rendering the component
+    var helloUser = TestUtils.renderIntoDocument(
+      <HelloUser user=‘Mario’/>
+    );
+
+    var helloUserNode = ReactDOM.findDOMNode(helloUser);
+
+    // Verify that it contains the proper output
+    expect(helloUserNode.textContent).toEqual(‘Hello Mario!’);
+
+    // ...
+  });
+});

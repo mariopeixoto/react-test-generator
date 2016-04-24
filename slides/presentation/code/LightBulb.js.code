@@ -1,0 +1,10 @@
+var LightBulb = React.createClass({
+  render: function() {
+1.  var isOn = this.props.isOn;
+2.  if (isOn) {
+3.    return <div>Light is on</div>;
+    } else {
+4.    return <div>Light is off</div>;
+    }
+  }
+});

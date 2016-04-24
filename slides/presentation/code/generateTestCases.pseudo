@@ -1,0 +1,7 @@
+GENERATE-TEST-CASES(ios, component):
+1. add required imports for React library and JTest library
+2. add test suite for component
+3. for each input,output on ios:
+4.    add input
+5.    add component rendering
+6.    add expectation for output
