@@ -357,6 +357,7 @@ export default class Presentation extends React.Component {
               <ListItem>Generate inputs correctly for complex components</ListItem>
               <ListItem>Stateful components</ListItem>
               <ListItem>Depedencies and mocks</ListItem>
+              <ListItem>ES6 spread operator "..."</ListItem>
             </List>
           </Slide>
           <Slide>
